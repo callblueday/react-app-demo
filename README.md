@@ -8,11 +8,9 @@ react+redux+router+typescript demo
 - 编辑器配置
     - vscode editor config
 - Git hook
-    - 代码编写规范（lint 检测）
-    - git commit 提交规范
-        - git commit hook
-        - git commitizen
-        - auto changeLog
+    - 代码编写规范检查（lint、格式化）
+    - git commit 提交规范（commitlint）
+    - Git auto changeLog
 - 开发过程
     - 接入后台 api 规范
 - 测试 
@@ -47,7 +45,7 @@ yarn build
     - [x] babel
     - [x] sass
     - [] redux
-    - [] envirments varialbles
+    - [x] envirments varialbles
 - Git hook
     - [x] 代码编写规范
         - husky: hook工具
@@ -93,7 +91,13 @@ commit 提交前缀包含：
 - test
 
 ### auto ChangeLog
+基于 [AutoChangeLog](https://github.com/CookPete/auto-changelog)。
+可以创建在根目录创建 `changelog-template.hbs` 文件用来定义 changeLog 模板。
+然后运行时指定模板
 
+```
+auto-changelog --template changelog-template.hbs
+```
 
 ## 单元测试
 
@@ -171,3 +175,9 @@ deploy:
 ```
 
 其他部署方式，请看 [官方文档](https://docs.travis-ci.com/user/deployment/)。
+
+### 基于 jenkins 的持续集成
+
+
+### 基于 gitlab 的持续集成并部署到阿里云的方案
+gitlab 依赖的是 pipeline.（暂略）

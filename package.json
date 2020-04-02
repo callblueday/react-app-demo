@@ -6,7 +6,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --watchAll=false",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "version": "auto-changelog --template changelog-template.hbs -p && git add CHANGELOG.md"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -20,6 +21,15 @@
     "lint-staged": {
         "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
             "prettier --write"
+        ]
+    },
+    "auto-changelog": {
+        "output": "CHANGELOG.md",
+        "template": "keepachangelog",
+        "unreleased": true,
+        "commitLimit": false,
+        "includeBranch": [
+            "master"
         ]
     },
     "dependencies": {
@@ -40,6 +50,7 @@
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
         "@types/jest": "^24.0.0",
+        "auto-changelog": "^1.16.3",
         "husky": "^4.2.3",
         "lint-staged": "^10.1.1",
         "prettier": "^2.0.2",
