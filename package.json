@@ -6,6 +6,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --watchAll=false",
+        "test-coverage": "npm test -- --coverage",
+        "test-report": "serve coverage/lcov-report/",
         "eject": "react-scripts eject",
         "version": "auto-changelog --template changelog-template.hbs -p && git add CHANGELOG.md"
     },
@@ -54,7 +56,8 @@
         "husky": "^4.2.3",
         "lint-staged": "^10.1.1",
         "prettier": "^2.0.2",
-        "react-scripts": "3.4.1"
+        "react-scripts": "3.4.1",
+        "serve": "^11.3.0"
     },
     "browserslist": {
         "production": [

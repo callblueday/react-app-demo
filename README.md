@@ -15,7 +15,7 @@ react+redux+router+typescript demo
     - 接入后台 api 规范
 - 测试 
     - 单元测试
-    - 测试覆盖率
+    - 测试覆盖率报告
 - 持续集成触发
 - 项目部署
 
@@ -72,12 +72,52 @@ yarn build
 ### 代码格式 hook
 基于 `lint-staged` 和 `prettier`， commit 前执行格式化。
 
-### git commit 提交规范
+1. 安装插件
+
+    ```
+    yarn add lint-staged prettier -D
+    ```
+
+2. `package.json` 中进行配置
+
+    ```
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged && npm test"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+            "prettier --write"
+        ]
+    },
+    ```
+
+### Git Commit 提交规范
 基于 [commitlint](https://github.com/conventional-changelog/commitlint). 
 
-需要增加 `commitlint.config.js` 到项目根目录
+1. 需要增加 `commitlint.config.js` 到项目根目录
 
-commit 提交前缀包含：
+    ```
+    module.exports = {
+        extends: ['@commitlint/config-conventional'],
+        rules: {
+            'subject-case': [0, 'always', 'lowerCase']
+        }
+    };
+    ```
+2. package.json 中配置
+
+    ```
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
+    },
+    ```
+
+commit 提交前缀包含
+
 - build
 - ci
 - chore
@@ -90,14 +130,33 @@ commit 提交前缀包含：
 - style
 - test
 
-### auto ChangeLog
+### Auto ChangeLog
 基于 [AutoChangeLog](https://github.com/CookPete/auto-changelog)。
-可以创建在根目录创建 `changelog-template.hbs` 文件用来定义 changeLog 模板。
-然后运行时指定模板
 
-```
-auto-changelog --template changelog-template.hbs
-```
+1. `package.json` 中配置
+
+    ```
+    "auto-changelog": {
+        "output": "CHANGELOG.md",
+        "template": "keepachangelog",
+        "unreleased": true,
+        "commitLimit": false,
+        "includeBranch": [
+            "master"
+        ]
+    }
+    ```
+
+2. 在根目录创建 `changelog-template.hbs` 文件用来定义 changeLog 模板。
+然后运行时指定模板，`package.json` 中配置脚本
+
+    ```
+    "scripts": {
+        "version": "auto-changelog --template changelog-template.hbs -p && git add CHANGELOG.md"
+    }
+    ```
+
+
 
 ## 单元测试
 
@@ -114,10 +173,54 @@ auto-changelog --template changelog-template.hbs
 ```
 # 执行测试
 yarn test
+```
 
-# 得到测试覆盖率
+### 测试覆盖率报告
+
+参考：[Running Tests](https://create-react-app.dev/docs/running-tests/)
+
+获取测试报告
+```
 npm test -- --coverage
 ```
+
+复写默认 jest 覆盖率配置示例
+
+```
+{
+  "name": "your-package",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": ["text"],
+    "snapshotSerializers": ["my-serializer-module"]
+  }
+}
+```
+
+启动本地服务来查看测试覆盖率报告
+
+基于 [serve库](https://www.npmjs.com/package/serve), 在 `package.json` 中配置
+```
+"scripts": {
+    "test": "react-scripts test --watchAll=false",
+    "test-coverage": "npm test -- --coverage && serve coverage/lcov-report/",
+    "test-report": "serve coverage/lcov-report/"
+}
+
+```
+
 
 ### 全局配置
 `src/setupTests.ts` 是全局配置文件，这里可以设置全局变量。用法待确认。
